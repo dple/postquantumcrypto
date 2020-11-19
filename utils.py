@@ -21,6 +21,7 @@ def powmod(a, b, mod):
         b //= 2
     return r
 
+
 def isPrime(p):
     """  Checking if p is a prime by using the observation that: p = 6k +/- 1 if p > 3 """
     if p <= 3:
@@ -36,7 +37,7 @@ def isPrime(p):
     return True
 
 
-def isProbablyPrime(p, iter):
+def isFermatPrime(p, iter):
     """
     Checking if p is a probably prime. The simplest method is Fermat primality test.
     Given an integer a, coprime to p, if
@@ -88,38 +89,38 @@ def nextPrime(n):
         p += 6
     return p
 
-def genPrime(b):
+def getPrime(b):
     """ Return a prime with b bits  """
     n = randint(2**(b - 1), 2**b)
 
     return nextPrime(n)
 
-def genShophieGermainPrime(b):
+def getShophieGermainPrime(b):
     """
     Find a Sophie Germain prime with b bits. p is Sophie Germain prime if:
     - p is prime
     - 2*p + 1 is prime
 
     """
-    p = genPrime(b - 1)
+    p = getPrime(b - 1)
     sp = 2*p + 1
 
     while not isPrime(sp):
-        p = genPrime(b - 1)
+        p = getPrime(b - 1)
         sp = 2*p + 1
     return p
 
-def genSafePrime(b):
+def getSafePrime(b):
     """
     Find a safe prime with b bits. p is a safe prime if:
     - p is prime
     - p // 2 is prime
     """
-    p = genPrime(b - 1)
+    p = getPrime(b - 1)
     sp = 2*p + 1
 
     while not isPrime(sp):
-        p = genPrime(b - 1)
+        p = getPrime(b - 1)
         sp = 2*p + 1
     return sp
 
@@ -131,7 +132,7 @@ def tests():
 
     print("{} raise to power {} mod {} is {}:".format(2, n - 1, n, powmod(2, n - 1, n)))
 
-    if isProbablyPrime(n, 16):
+    if isFermatPrime(n, 16):
         print("{} is a Fermat prime".format(n))
     if isMillerRabinPrime(n, 5):
         print("{} is a Miller-Rabin prime".format(n))
@@ -142,15 +143,15 @@ def tests():
     assert isPrime(p), "p is not a prime"
     print("The next prime after {} is {}".format(n, p))
 
-    p = genPrime(b + 1)
+    p = getPrime(b + 1)
     assert isPrime(p), "p is not a prime"
     print("{} is a prime with {} bits".format(p, b))
 
-    p = genShophieGermainPrime(b + 1)
+    p = getShophieGermainPrime(b + 1)
     assert isPrime(p), "p is not a Sophie Germain prime"
     print("{} is a Shophie Germain prime with {} bits".format(p, b))
 
-    p = genSafePrime(b + 1)
+    p = getSafePrime(b + 1)
     assert isPrime(p), "p is not a safe prime"
     print("{} is a safe prime with {} bits".format(p, b))
 
