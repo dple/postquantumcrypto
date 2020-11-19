@@ -9,7 +9,7 @@ import numpy as np
 from numpy.polynomial import polynomial as P
 
 def polymod(A, q, poly_mod):
-    return np.floor(np.polydiv(A, poly_mod)[1]).astype(np.int64) % q
+    return np.floor(P.polydiv(A, poly_mod)[1]).astype(np.int64) % q
 
 def polyadd(A, B, q, poly_mod):
     """ Perform addition of two polynomials a, b in ring Zq[x]/<poly_mod>
@@ -17,8 +17,8 @@ def polyadd(A, B, q, poly_mod):
         q: coefficient modulus
         poly_mod: polynomial modulus
     """
-    C = P.polyadd(A, B) % q
-    return np.floor(np.polydiv(C, poly_mod)[1]).astype(np.int64) % q
+    C = P.polyadd(A, B)
+    return np.floor(P.polydiv(C, poly_mod)[1]).astype(np.int64) % q
 
 def polymul(A, B, q, poly_mod):
     """" Perform addition of two polynomials a, b in ring Zq[x]/<poly_mod>
@@ -26,8 +26,8 @@ def polymul(A, B, q, poly_mod):
          q: coefficient modulus
          poly_mod: polynomial modulus
     """
-    C = P.polymul(A, B) % q
-    return np.floor(np.polydiv(C, poly_mod)[1]).astype(np.int64) % q
+    C = P.polymul(A, B)
+    return np.floor(P.polydiv(C, poly_mod)[1]).astype(np.int64) % q
 
 
 def bin_poly_gen(d):
