@@ -1,7 +1,6 @@
 from random import randint
 import numpy as np
 
-
 def powmod(a, b, mod):
     """
     Calculate modulo exponentiation using right-to-left binary implementation
@@ -20,7 +19,6 @@ def powmod(a, b, mod):
         A = (A * A) % mod
         b //= 2
     return r
-
 
 def isPrime(p):
     """  Checking if p is a prime by using the observation that: p = 6k +/- 1 if p > 3 """
@@ -79,10 +77,26 @@ def isMillerRabinPrime(p, iter):
 
 def nextPrime(n):
     """ Calculate a prime p that is bigger than n using the fact that p = 6k +/- 1 """
+
+    if n <= 0:
+        return 2
+    elif n < 3:
+        return n + 1
+
     if n % 6 == 0:
-        p = n + 1
+        if isPrime(n + 1):
+            return n + 1
+        else:
+            p = n + 5
+
+    elif n % 6 == 5:
+        if isPrime(n + 2):
+            return n + 2
+        else:
+            p = n + 6
     else:
         p = n + (5 - (n % 6))
+
     while not isPrime(p):
         if isPrime(p + 2):
             return p + 2
@@ -110,7 +124,7 @@ def getShophieGermainPrime(b):
         sp = 2*p + 1
     return p
 
-def getSafePrime(b):
+def genSafePrime(b):
     """
     Find a safe prime with b bits. p is a safe prime if:
     - p is prime
@@ -124,12 +138,23 @@ def getSafePrime(b):
         sp = 2*p + 1
     return sp
 
+def factor(n):
+    """  Factorize an integer n  """
+    p = 2
+    factors = []
+    while n != 1:
+        while n % p == 0:
+            factors.append(p)
+            n /= p
+        p = nextPrime(p)
+    return factors
 
 
 def tests():
     n = randint(2, 100000)
-    b = randint(2, 31)      # random int <=63 as we work with int64
+    b = randint(2, 63)      # random int <=63 as we work with int64
 
+    print("Factors of {} is {}".format(n, factor(n)))
     print("{} raise to power {} mod {} is {}:".format(2, n - 1, n, powmod(2, n - 1, n)))
 
     if isFermatPrime(n, 16):
@@ -138,6 +163,8 @@ def tests():
         print("{} is a Miller-Rabin prime".format(n))
     if isPrime(n):
         print("{} is a prime".format(n))
+    else:
+        print("{} is not a prime".format(n))
 
     p = nextPrime(n)
     assert isPrime(p), "p is not a prime"
@@ -151,7 +178,7 @@ def tests():
     assert isPrime(p), "p is not a Sophie Germain prime"
     print("{} is a Shophie Germain prime with {} bits".format(p, b))
 
-    p = getSafePrime(b + 1)
+    p = genSafePrime(b + 1)
     assert isPrime(p), "p is not a safe prime"
     print("{} is a safe prime with {} bits".format(p, b))
 
