@@ -27,9 +27,9 @@ def isPrime(p):
     if p % 2 == 0 or p % 3 == 0:
         return False
 
-    sqr = np.sqrt(p).astype(np.int64) + 1
-    for i in range(5, sqr, 6):
-        if p % i == 0 or p % (i + 2) == 0:
+    sqrt = np.sqrt(p).astype(np.int64) + 1    
+    for i in filter(lambda x: x % 6 == 1 or x % 6 == 5, range(5, sqrt)):
+        if p % i == 0:
             return False
 
     return True
